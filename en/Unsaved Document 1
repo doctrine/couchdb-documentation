@@ -1,0 +1,9 @@
+Introduction
+============
+
+Doctrine CouchDB comes with two components that enable you to communicate to a CouchDB database using PHP:
+
+-   CouchDB Client - A thin layer that comes with HTTP clients optimized for speaking to CouchDB and a convenience wrapper around the CouchDB API.
+-   Object-Document-Mapper (ODM) - A mapping layer that maps CouchDB documents to PHP objects following the Doctrine persistence semantics also employed by the Doctrine 2.0 ORM and MongoDB ODM.
+
+
