@@ -62,8 +62,11 @@ Here is a quick overview of the built-in mapping types:
 -  ``string``: Type that maps a JSON String to a PHP string.
 -  ``datetime``: Type that maps an stringified Date to a PHP
    DateTime object.
+-  ``mixed``: Type that saves and retrives any value unconverted into the Couch.
+-  ``integer``: Type that ensures the value to be an integer.
+-  ``boolean``: Type that ensures the value to be a boolean.
 
-Property Mapping
+Field Mapping
 ----------------
 
 After a class has been marked as an entity it can specify mappings
@@ -89,3 +92,115 @@ Example:
         /** @Field(type="string") */
         private $name;
     }
+
+Indexing Fields
+~~~~~~~~~~~~~~~
+
+CouchDB uses map-reduce to query documents. Except querying for the ID of a document
+there is no additional query capability available for fields. Doctrine CouchDB ODM
+allows you to use a predefined view that allows equality comparisons on fields:
+
+Example:
+
+.. code-block:: php
+
+    <?php
+    /** @Document */
+    class MyPersistentClass
+    {
+        /** @Field(type="string", indexed=true) */
+        private $name;
+    }
+
+All indexed fields can be queried in ``DocumentRepository::findBy()`` and ``DocumentRepository:findOneBy()``:
+
+.. code-block:: php
+
+    <?php
+    $repository = $documentManager->getRepository("MyProject\Document\MyPersistentClass");
+    $john = $repository->findOneBy(array("name" => "John Galt"));
+
+Json Names
+~~~~~~~~~~
+
+If your fields for some reason have different names in the PHP class and CouchDB document you 
+can use the attribute "jsonName" to specify the name of the key in the json document.
+
+Id Mapping
+----------
+
+CouchDB documents have a special field "_id" that contains the globally
+unique identifier of a document in the database. This is always a string,
+so it suffices to specify only the @Id annotation on the property:
+
+Example:
+
+.. code-block:: php
+
+    <?php
+    /** @Document */
+    class MyPersistentClass
+    {
+        /** @Id */
+        private $id;
+    }
+
+Id Generation Strategies
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default the ODM uses CouchDBs batch UUID generation mechanism
+to generate a UUID for a document as soon as it is registered with
+the DocumentManager. You can configure different strategies to generate
+IDs, here is a list:
+
+-   @Id(strategy="UUID") - Uses CouchDB UUID generation. This is the implicitly
+    selected strategy if you do not specify the strategy argument
+-   @Id(strategy="ASSIGNED") - Assumes that you as developer have assigned a unique
+    identifier before passing the document to the DocumentManager for the first time.
+
+Attachments
+-----------
+
+You can map an array of all CouchDB attachments to a document to a field in your PHP class:
+
+Example:
+
+.. code-block:: php
+
+    <?php
+    /** @Document */
+    class MyPersistentClass
+    {
+        /** @Attachments */
+        private $attachments;
+    }
+
+The mapped field is indexed by filename and contains instances of ``Doctrine\ODM\CouchDB\Attachment``.
+Contents of the attachments are loaded lazily by using the stub details inside the CouchDB document.
+
+Document Repositories
+---------------------
+
+A repository is a finder class for your documents. Every document automatically has a repository
+of the type ``Doctrine\ODM\CouchDB\DocumentRepository``. You can specify your own repository classes
+that extend the base repository and provide additional finder methods:
+
+Example:
+
+.. code-block:: php
+
+    <?php
+    /** @Document(repositoryClass="MyProject\Repository\MyPersistentRepository") */
+    class MyPersistentClass
+    {
+        /** @Attachments */
+        private $attachments;
+    }
+
+Then when calling ``DocumentManager#getRepository`` you will get an instance of your repository subclass:
+
+.. code-block:: php
+
+    <?php
+    $repository = $documentManager->getRepository("MyProject\Document\MyPersistentClass");
+    

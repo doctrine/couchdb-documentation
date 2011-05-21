@@ -10,3 +10,9 @@ Contents:
    reference/introduction
    reference/configuration
    reference/basic-mapping
+   reference/association-mapping
+   reference/inheritance-mapping
+   reference/working-with-objects
+   reference/map-reduce-queries
+   reference/lucene-queries
+   reference/attachments
