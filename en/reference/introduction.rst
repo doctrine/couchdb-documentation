@@ -3,7 +3,7 @@ Introduction
 
 Doctrine CouchDB comes with two components that enable you to communicate to a CouchDB database using PHP:
 
--   **CouchDB Client** - A thin layer that comes with HTTP clients optimized for speaking to CouchDB and a convenience wrapper around the CouchDB API.
+-   **CouchDB Client** - A thin layer that includes a HTTP clients optimized for speaking to CouchDB and a convenience wrapper around the CouchDB API.
 -   **Object-Document-Mapper (ODM)** - A mapping layer that maps CouchDB documents to PHP objects following the Doctrine persistence semantics also employed by the Doctrine 2.0 ORM and MongoDB ODM.
 
 You can use the CouchDB Client without the Document-Mapper if you just want to talk to a CouchDB database without the object mapping. The Mapper however depends on the CouchDB Client.
@@ -25,7 +25,7 @@ The Doctrine persistence semantics demand a strict separation of persistence and
 
 For example take this BlogPost entity:
 
-.. code-block::
+.. code-block:: php
 
     <?php
     namespace MyApp\Document;
@@ -64,9 +64,31 @@ No abstract/base-class nor interface was implemented, yet you can save an object
             // getter/setter here
         }
 
+    .. code-block:: xml
+    
+        <doctrine-mapping>
+            <document name="MyApp\Document\BlogPost">
+                <id name="id" />
+                <field name="headline" type="string" />
+                <field name="text" type="string" />
+                <field name="publishDate" type="datetime" />
+            </document>
+        </doctrine-mapping>
+
+    .. code-block:: yaml
+
+        MyApp\Document\BlogPost:
+            type: document
+            id:
+                id: ~
+            fields:
+                headline: { type: string }
+                text: { type: string }
+                publishDate: { type: datetime }
+
 This simple definitions describe to Doctrine CouchDB ODM what parts of your object should be mapped. Now your application code saving an instance of a blog post will look like the following lines:
 
-.. code-block::
+.. code-block:: php
 
     <?php
     // $dm is an instanceof Doctrine\ODM\CouchDB\DocumentManager
@@ -86,9 +108,9 @@ The call to ``flush()`` triggers the synchronization of the in-memory state of a
 Write-Behind
 ~~~~~~~~~~~~
 
-You may ask yourself why ``persist`` and ``flush`` are two separate functions in the previous example. Doctrine persistence semantics apply a drastic performance optimization by aggregating all the required changes and synchronizing them back to the database at once. In the case of CouchDB ODM this means that all changes on objects (managed by CouchDB) in memory of the current PHP request are synchronized to CouchDB in a single POST request using the HTTP Bulk Document API. Compared to making an update request per document this leads to a considerable difference in performance.
+You may ask yourself why ``persist`` and ``flush`` are two separate functions in the previous example. Doctrine persistence semantics apply a performance optimization technique by aggregating all the required changes and synchronizing them back to the database at once. In the case of CouchDB ODM this means that all changes on objects (managed by CouchDB) in memory of the current PHP request are synchronized to CouchDB in a single POST request using the HTTP Bulk Document API. Compared to making an update request per document this leads to a considerable increase in performance.
 
-This approach has a drawback though with regards to the transactional semantics of CouchDB. By default the bulk update is forced using the ... parameter of the HTTP BUlk Document API, which means that in case of different versioning numbers it will produce document conflicts that you have to resolve later. Doctrine CouchDB ODM offers an event to resolve any document conflict and it is planned to offer automatic resolution strategies such as "First-One Wins" or "Last-One Wins". If you don't enable forcing changes to the CouchDB you can end up with inconsistent state, for example if one update of a document is accepted and another one is rejected.
+This approach has a drawback though with regards to the transactional semantics of CouchDB. By default the bulk update is forced using the allOrNothing parameter of the HTTP BUlk Document API, which means that in case of different versioning numbers it will produce document conflicts that you have to resolve later. Doctrine CouchDB ODM offers an event to resolve any document conflict and it is planned to offer automatic resolution strategies such as "First-One Wins" or "Last-One Wins". If you don't enable forcing changes to the CouchDB you can end up with inconsistent state, for example if one update of a document is accepted and another one is rejected.
 
 We haven't actually figured out the best way of handling "object transactions" ourselfes, but are experimenting with it to find the best possible solution before releasing a stable Doctrine CouchDB version. Feedback in this area is highly appreciated.
 
@@ -97,7 +119,7 @@ Querying
 
 Coming back to our blog post example, in any next request you can grab the BlogPost by calling a simple finder method:
 
-.. code-block::
+.. code-block:: php
 
     <?php
     // $dm is an instanceof Doctrine\ODM\CouchDB\DocumentManager
@@ -114,41 +136,191 @@ Object-Graph Traversal
 
 Besides the actual saving of objects the Doctrine persistence semantics dictate that you can always traverse from any part of the object graph to any other part as long as there are associations connecting the objects with each other. In a simple implementation this would mean you have to load all the objects into memory for every request. However Doctrine CouchDB is very efficient using the lazy-loading pattern.
 
-Every single or multi-valued association such as Many-To-One or Many-To-Many are replaced with lazy loading proxies when created. This means the object graph is fully traversable, but only the parts you actually accessed get loaded into memory. For this feature to work there is some code-generation necessary, Doctrine creates proxy classes that extend your documents if necessary.
+Every single or multi-valued association such as Many-To-One or Many-To-Many are replaced with lazy loading proxies when created. This means the object graph is fully traversable, but only the parts you actually access are loaded into memory. For this feature to work there is some code-generation necessary, Doctrine creates proxy classes that extend your documents if necessary.
 
-Configuration
-=============
+Why NoSQL?
+----------
 
-Installation
-------------
+Document databases map perfectly to objects (in any language, not just PHP). The Doctrine ORM in contrast requires very complex logic to allow the translation from relational databasees to PHP objects and back and still lacks a lot of the features that NoSQL databases allow:
 
-Currently you have to install CouchDB ODM from Github at http://github.com/doctrine/couchdb-odm
+-   Assocations between arbitrary collections of objects
+-   Embedded (value) objects
+-   Saving (associative) arrays of data or references.
 
-Bootstrapping
--------------
+This is all possible without much hazzle in CouchDB. However there are also downsides:
 
-To bootstrap your application with Doctrine CouchDB ODM you have to initialize the DocumentManager. The following code block shows a sample setup, rather complex at the moment but it will get simpler in the future:
+-   Migrations between different versions of the same document type are complicated
+-   No transactional support
+-   No foreign key support
+
+This is only a very small overview of the differences between the ORM and CouchDB ODM. There are up- and downsides in using both of them and you should pick the one that suits your needs best.
+
+CouchDB Document Structure
+--------------------------
+
+Doctrine maps keys of CouchDB documents to PHP object properties. Take the following sample CouchDB document:
+
+.. code-block:: javascript
+
+    {
+       "_id": "2a9d3e2af0797fad094dded89a61c18b",
+       "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
+       "name": "John Doe",
+       "country": "New Zealand"
+    }
+
+It would make sense to map this document to a PHP object called "Person" and Doctrine could populate it the following way:
 
 .. code-block:: php
 
     <?php
+    namespace MyProject\Document;
 
-    $httpClient = new \Doctrine\ODM\CouchDB\HTTP\SocketClient();
-    $database = "myapp";
-    $reader = new \Doctrine\Common\Annotations\AnnotationReader();
-    $reader->setDefaultAnnotationNamespace('Doctrine\ODM\CouchDB\Mapping\\');
-    $paths = __DIR__ . "/Documents";
-    $metadriver = new \Doctrine\ODM\CouchDB\Mapping\Driver\AnnotationDriver($reader, $paths);
+    /** @Document */
+    class Person
+    {
+        /** @Id */
+        public $id;
+        /** @Field(type="string") */
+        public $name;
+        /** @Field(type="string") */
+        public $country;
+    }
 
-    $config = new \Doctrine\ODM\CouchDB\Configuration();
-    $config->setDatabase($database);
-    $config->setProxyDir(__DIR__ . "/cache");
-    $config->setMetadataDriverImpl($metadriver);
-    $config->setHttpClient($httpClient);
+    $person = new \MyProject\Document\Person();
+    $person->id = "2a9d3e2af0797fad094dded89a61c18b";
+    $person->name = "John Doe";
+    $person->country = "New Zealand";
 
-    $documentManager = \Doctrine\ODM\CouchDB\DocumentManager::create($config);
+This is basically what Doctrine CouchDB does, but it does more under the hood.
 
-Explanation will follow.
+Document Type
+~~~~~~~~~~~~~
 
+In the following API call to the ``DocumentManager`` not only the objects ID in CouchDB is given to the find method, but the type of the class aswell.
 
+.. code-block:: php
 
+    <?php
+    $person = $dm->find("Person", "2a9d3e2af0797fad094dded89a61c18b");
+
+Because CouchDB works with globally unique identifiers on the database level this restriction is not necessary technically, but there are three reasons why Doctrine CouchDB enforces them:
+
+-   MongoDB and the ORM need the type of object to determine which set of identifiers to query for the given identifier. MongoDB saves documents in different collections, the ORM saves the objects in different database tables. Doctrine uses a unified set of Persistence interfaces and CouchDB has to follow them.
+-   The given type is used to make an assertion if the document found in CouchDB is really of the specified type. This helps to force some structure onto the schemaless design of CouchDB and will help to assure your code always works with the right set of objects.
+-   This is also a security mechanism, it automatically prevents users from instantiating documents of different types by changing the url of a page.
+
+To make this assertion work Doctrine CouchDB has to save the type of the document aswell. This is done in a special metadata key inside the CouchDB documents:
+
+.. code-block:: javascript
+
+    {
+        "_id": "2a9d3e2af0797fad094dded89a61c18b",
+        "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
+        "doctrine_metadata":
+        {
+            "type": "MyProject.Document.Person"
+        }
+       "name": "John Doe",
+       "country": "New Zealand"
+    }
+
+The namespace seperator is translated into a dot to simplify using this information in CouchDB views, because the PHP namespace seperator needs to be escaped in javascript literals.
+
+Associations
+~~~~~~~~~~~~
+
+By default CouchDB does not support associations. Of course you can just save associated identifiers in a document key, but CouchDB cannot enforce referential integrity for this associations. If the referenced document is deleted you will have a dangling reference to it. You have to be aware of this potential problem when developing an application with Doctrine CouchDB.
+
+Instead of saving the association reference id into a matching json document key, Doctrine CouchDB uses a special associations key in the doctrine_metadata key. Using this mechanism Doctrine can use a single generic view to make all associations accessible from the "inverse side" of their relationship. Lets extend our example of the "Person" class, which shall now have a reference to a set of addresses and to their mother and father:
+
+.. code-block:: javascript
+
+    {
+        "_id": "2a9d3e2af0797fad094dded89a61c18b",
+        "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
+        "doctrine_metadata":
+        {
+            "type": "MyProject.Document.Person",
+            "associations":
+            {
+                "father": "4cb8afdfdafdacbfbabf02575d210e3f",
+                "mother": "884eeb55df405b43d03a5474f4371f98",
+                "addresses": 
+                {
+                    "4e0f9cc999cbd2694d6dd5cc37f6ee47",
+                    "5091720c6b040e15eea38b46747ae0ab"
+                }
+            }
+        }
+       "name": "John Doe",
+       "country": "New Zealand"
+    }
+
+The associated php object looks like:
+
+.. code-block:: php
+
+    <?php
+    /** @Document */
+    class Person
+    {
+        /** @Id */
+        public $id;
+        /** @Field(type="string") */
+        public $name;
+        /** @Field(type="string") */
+        public $country;
+        /** @ReferenceOne(targetDocument="Person") */
+        public $father;
+        /** @ReferenceOne(targetDocument="Person") */
+        public $mother;
+        /** @ReferenceMany(targetDocument="Address") */
+        public $addresses;
+    }
+
+In this example the @ReferenceOne and @ReferenceMany annotations, which are used to register associations with the CouchDB mapper, are restricted to target documents of certain types (Person and Address). You can aswell omit this information and CouchDB will allow you to save arbitrary objects into this field.
+
+Indexes
+~~~~~~~
+
+The Doctrine persistence interfaces ship with a concept called ObjectRepository that allows to query for any one or set of fields of an object. Because CouchDB uses views for querying (comparable to materialized views in relational databases) this functionality cannot be achieved out of the box. Doctrine CouchDB could offer a view that exposes every field of every document, but this view would only grow into infinite size and most of the information would be useless.
+
+Instead you have to explicitly set classes and fields as "indexed", which will then allow to query them through the ObjectRepository finder methods:
+
+    <?php
+    /** @Document(indexed=true) */
+    class Person
+    {
+        /** @Field(type="string", indexed=true) */
+        public $name;
+    }
+
+This will lead to a JSON document structure that looks like:
+
+.. code-block:: javascript
+
+    {
+        "_id": "2a9d3e2af0797fad094dded89a61c18b",
+        "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
+        "doctrine_metadata":
+        {
+            "type": "MyProject.Document.Person",
+            "indexed": true,
+            "indexes": ["name"]
+        }
+       "name": "John Doe",
+       "country": "New Zealand"
+    }
+
+You can now query the repository for person objects:
+
+.. code-block:: php
+
+    <?php
+    // enabled with @Document(indexed=true)
+    $persons = $dm->getRepository('MyProject\Document\Person')->findAll();
+    // enabled with @Field(indexed=true)
+    $persons = $dm->getRepository('MyProject\Document\Person')->findBy(array("name" => "Benjamin"));
+
+All this functionality is described in detail in later chapters, this chapter served as introduction how Doctrine saves its data into CouchDB documents.

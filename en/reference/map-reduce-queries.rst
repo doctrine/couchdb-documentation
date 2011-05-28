@@ -24,7 +24,7 @@ design document in the database:
     
 If the directory structure now looked like the following:
 
-.. code-block::
+::
 
     couchdb/
         views/
