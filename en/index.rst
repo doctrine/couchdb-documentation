@@ -19,3 +19,4 @@ ships with a thin wrapper around the CouchDB HTTP API.
    reference/map-reduce-queries
    reference/lucene-queries
    reference/attachments
+   reference/tools
