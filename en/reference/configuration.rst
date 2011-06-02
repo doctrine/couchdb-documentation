@@ -62,18 +62,62 @@ See this example:
     <?php
     $database = "project_database_name";
     $documentPaths = array("MyProject\Documents");
-    $httpClient = new \Doctrine\ODM\CouchDB\HTTP\SocketClient();
+    $couchClient = \Doctrine\CouchDB\CouchDBClient::create(array('dbname' => $database));
 
     $config = new \Doctrine\ODM\CouchDB\Configuration();
     $metadataDriver = $config->newDefaultAnnotationDriver($documentPaths);
 
-    $config->setDatabase($database);
     $config->setProxyDir(__DIR__ . "/proxies);
     $config->setMetadataDriverImpl($metadataDriver);
-    $config->setHttpClient($httpClient);
     $config->setLuceneHandlerName('_fti');
 
-    $dm = \Doctrine\ODM\CouchDB\DocumentManager::create($config);
+    $dm = \Doctrine\ODM\CouchDB\DocumentManager::create($couchClient, $config);
+
+CouchDBClient
+-------------
+
+You can create a CouchDBClient with a factory method or just by
+constructing a new instance. The factory method accepts an array of configuration
+parameters and applies a set of defaults. The constructor requires
+an instantiated HTTP Client and a database name.
+
+Database Name (***REQUIRED***)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You have to specify the name of the CouchDB database to use
+with Doctrine CouchDB.
+
+.. code-block:: php
+
+    <?php
+    $couchClient = CouchClient::create(array('dbname' => 'test_database'));
+    echo $couchClient->getDatabase();
+
+HTTP Client (***OPTIONAL***)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: php
+
+    <?php
+    $couchClient = CouchClient::create(array('dbname' => 'test_database'));
+    $client = $couchClient->getHttpClient();
+
+There are two different HTTP Clients shipped with Doctrine CouchDB:
+
+-   ``Doctrine\ODM\CouchDB\HTTP\SocketClient`` The default client uses fsocketopen and
+    has very good performance using keep alive connections.
+-   ``Doctrine\ODM\CouchDB\HTTP\StreamClient`` Uses fopen and is therefore simpler than the SocketClient,
+    however cannot use keep alive. In some PHP setups the SocketClient doesn't work and the StreamClient
+    is a fallback for these situations.
+
+You can pass the following options to configure the HTTP Client:
+
+-   host (default localhost)
+-   port (default 5984)
+-   user (default null)
+-   password (default null)
+-   ip (default null)
+-   logging (default false)
 
 Configuration Options
 ---------------------
@@ -174,35 +218,6 @@ The recommended implementations for production are:
 For development you should use the
 ``Doctrine\Common\Cache\ArrayCache`` which only caches data on a
 per-request basis.
-
-Database Name (***REQUIRED***)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You have to specify the name of the CouchDB database to use
-with Doctrine CouchDB.
-
-.. code-block:: php
-
-    <?php
-    $config->setDatabase($databaseName);
-    $config->getDatabase();
-
-HTTP Client (***OPTIONAL***)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: php
-
-    <?php
-    $config->setHttpClient($httpClient);
-    $config->getHttpClient();
-
-There are two different HTTP Clients shipped with Doctrine CouchDB:
-
--   ``Doctrine\ODM\CouchDB\HTTP\SocketClient`` The default client uses fsocketopen and
-    has very good performance using keep alive connections.
--   ``Doctrine\ODM\CouchDB\HTTP\StreamClient`` Uses fopen and is therefore simpler than the SocketClient,
-    however cannot use keep alive. In some PHP setups the SocketClient doesn't work and the StreamClient
-    is a fallback for these situations.
 
 Lucene Handler Name (***OPTIONAL***)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
