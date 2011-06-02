@@ -41,6 +41,8 @@ the ``DocumentManager#createLuceneQuery`` method. A lucene query instance extend
 
 An example showing all the functionalities of a lucene query looks like:
 
+.. code-block:: php
+
     $query = $dm->createLuceneQuery("designName", "viewName");
     $result = $query->setQuery("+bar -foo")
           ->setSkip(20)

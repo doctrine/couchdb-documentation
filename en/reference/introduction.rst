@@ -210,19 +210,16 @@ Because CouchDB works with globally unique identifiers on the database level thi
 -   The given type is used to make an assertion if the document found in CouchDB is really of the specified type. This helps to force some structure onto the schemaless design of CouchDB and will help to assure your code always works with the right set of objects.
 -   This is also a security mechanism, it automatically prevents users from instantiating documents of different types by changing the url of a page.
 
-To make this assertion work Doctrine CouchDB has to save the type of the document aswell. This is done in a special metadata key inside the CouchDB documents:
+To make this assertion work Doctrine CouchDB has to save the type of the document aswell. This is done in a special metadata key "type" inside the CouchDB documents:
 
 .. code-block:: javascript
 
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
-        "doctrine_metadata":
-        {
-            "type": "MyProject.Document.Person"
-        }
-       "name": "John Doe",
-       "country": "New Zealand"
+        "type": "MyProject.Document.Person",
+        "name": "John Doe",
+        "country": "New Zealand"
     }
 
 The namespace seperator is translated into a dot to simplify using this information in CouchDB views, because the PHP namespace seperator needs to be escaped in javascript literals.
@@ -232,29 +229,27 @@ Associations
 
 By default CouchDB does not support associations. Of course you can just save associated identifiers in a document key, but CouchDB cannot enforce referential integrity for this associations. If the referenced document is deleted you will have a dangling reference to it. You have to be aware of this potential problem when developing an application with Doctrine CouchDB.
 
-Instead of saving the association reference id into a matching json document key, Doctrine CouchDB uses a special associations key in the doctrine_metadata key. Using this mechanism Doctrine can use a single generic view to make all associations accessible from the "inverse side" of their relationship. Lets extend our example of the "Person" class, which shall now have a reference to a set of addresses and to their mother and father:
+On top of saving the association reference id into a matching json document key, Doctrine CouchDB uses a special associations key in the doctrine_metadata key to save the field names of associations. Using this mechanism Doctrine can use a single generic view to make all associations accessible from the "inverse side" of their relationship. Lets extend our example of the "Person" class, which shall now have a reference to a set of addresses and to their mother and father:
 
 .. code-block:: javascript
 
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
+        "type": "MyProject.Document.Person",
         "doctrine_metadata":
         {
-            "type": "MyProject.Document.Person",
-            "associations":
-            {
-                "father": "4cb8afdfdafdacbfbabf02575d210e3f",
-                "mother": "884eeb55df405b43d03a5474f4371f98",
-                "addresses": 
-                {
-                    "4e0f9cc999cbd2694d6dd5cc37f6ee47",
-                    "5091720c6b040e15eea38b46747ae0ab"
-                }
-            }
+            "associations": ["father", "mother", "addresses"]
         }
-       "name": "John Doe",
-       "country": "New Zealand"
+        "name": "John Doe",
+        "country": "New Zealand",
+        "father": "4cb8afdfdafdacbfbabf02575d210e3f",
+        "mother": "884eeb55df405b43d03a5474f4371f98",
+        "addresses":
+        {
+            "4e0f9cc999cbd2694d6dd5cc37f6ee47",
+            "5091720c6b040e15eea38b46747ae0ab"
+        }
     }
 
 The associated php object looks like:
@@ -288,6 +283,8 @@ The Doctrine persistence interfaces ship with a concept called ObjectRepository 
 
 Instead you have to explicitly set classes and fields as "indexed", which will then allow to query them through the ObjectRepository finder methods:
 
+.. code-block:: php
+
     <?php
     /** @Document(indexed=true) */
     class Person
@@ -303,14 +300,14 @@ This will lead to a JSON document structure that looks like:
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
+        "type": "MyProject.Document.Person",
         "doctrine_metadata":
         {
-            "type": "MyProject.Document.Person",
             "indexed": true,
             "indexes": ["name"]
-        }
-       "name": "John Doe",
-       "country": "New Zealand"
+        },
+        "name": "John Doe",
+        "country": "New Zealand"
     }
 
 You can now query the repository for person objects:
