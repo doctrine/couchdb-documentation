@@ -37,7 +37,7 @@ Doctrine classes.
     $loader = new \Doctrine\Common\ClassLoader("Doctrine\ODM\CouchDB", $couchPath);
     $loader->register();
 
-    $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath."/vendor);
+    $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath."/vendor");
     $loader->register();
 
 If Doctrine Common is installed via PEAR the ClassLoader can be loaded
@@ -67,7 +67,7 @@ See this example:
     $config = new \Doctrine\ODM\CouchDB\Configuration();
     $metadataDriver = $config->newDefaultAnnotationDriver($documentPaths);
 
-    $config->setProxyDir(__DIR__ . "/proxies);
+    $config->setProxyDir(__DIR__ . "/proxies");
     $config->setMetadataDriverImpl($metadataDriver);
     $config->setLuceneHandlerName('_fti');
 
