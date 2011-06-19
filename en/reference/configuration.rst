@@ -279,7 +279,7 @@ identifier. You could simply do this:
     <?php
     // $dm instanceof DocumentManager, $cart instanceof MyProject\Model\Cart
     // $itemId comes from somewhere, probably a request parameter
-    $item = $em->getReference('MyProject\Model\Item', $itemId);
+    $item = $dm->getReference('MyProject\Model\Item', $itemId);
     $cart->addItem($item);
 
 Here, we added an Item to a Cart without loading the Item from the
