@@ -51,6 +51,15 @@ from the include path:
     $loader = new \Doctrine\Common\ClassLoader("Doctrine\Common");
     $loader->register();
 
+    $loader = new \Doctrine\Common\ClassLoader("Doctrine\ODM\CouchDB" );
+    $loader->register();
+
+    $loader = new \Doctrine\Common\ClassLoader("Doctrine\CouchDB" );
+    $loader->register();
+
+    $loader = new \Doctrine\Common\ClassLoader("Symfony");
+    $loader->register();
+
 Obtaining the DocumentManager
 -----------------------------
 
@@ -60,47 +69,33 @@ See this example:
 .. code-block:: php
 
     <?php
-    $database = "project_database_name";
+    $databaseName = "project_database_name";
     $documentPaths = array("MyProject\Documents");
-    $couchClient = \Doctrine\CouchDB\CouchDBClient::create(array('dbname' => $database));
+    $client = new \Doctrine\CouchDB\HTTP\SocketClient();
 
     $config = new \Doctrine\ODM\CouchDB\Configuration();
     $metadataDriver = $config->newDefaultAnnotationDriver($documentPaths);
 
+    $config->setHttpClient( $client, $databaseName );
     $config->setProxyDir(__DIR__ . "/proxies");
     $config->setMetadataDriverImpl($metadataDriver);
     $config->setLuceneHandlerName('_fti');
 
-    $dm = \Doctrine\ODM\CouchDB\DocumentManager::create($couchClient, $config);
+    $dm = new \Doctrine\ODM\CouchDB\DocumentManager($config);
 
 CouchDBClient
 -------------
 
-You can create a CouchDBClient with a factory method or just by
-constructing a new instance. The factory method accepts an array of configuration
-parameters and applies a set of defaults. The constructor requires
-an instantiated HTTP Client and a database name.
+You can create a CouchDBClient just by constructing a new instance.
+The constructor requires an instantiated HTTP Client and a database name.
 
-Database Name (***REQUIRED***)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You have to specify the name of the CouchDB database to use
-with Doctrine CouchDB.
-
-.. code-block:: php
-
-    <?php
-    $couchClient = CouchClient::create(array('dbname' => 'test_database'));
-    echo $couchClient->getDatabase();
-
-HTTP Client (***OPTIONAL***)
+HTTP Client (***REQUIRED***)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: php
 
     <?php
-    $couchClient = CouchClient::create(array('dbname' => 'test_database'));
-    $client = $couchClient->getHttpClient();
+    $client = new \Doctrine\CouchDB\HTTP\SocketClient();
 
 There are two different HTTP Clients shipped with Doctrine CouchDB:
 
@@ -110,20 +105,36 @@ There are two different HTTP Clients shipped with Doctrine CouchDB:
     however cannot use keep alive. In some PHP setups the SocketClient doesn't work and the StreamClient
     is a fallback for these situations.
 
-You can pass the following options to configure the HTTP Client:
+You can pass the following arguments to configure the HTTP Client:
 
 -   host (default localhost)
 -   port (default 5984)
--   user (default null)
+-   username (default null)
 -   password (default null)
 -   ip (default null)
--   logging (default false)
+
+With the setOption Method you can change the additional options:
+
+-  keep-alive (default true)
+-  timeout (default 0.01)
 
 Configuration Options
 ---------------------
 
 The following sections describe all the configuration options
 available on a ``Doctrine\ODM\CouchDB\Configuration`` instance.
+
+Database Name (***REQUIRED***)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You have to specify the name of the CouchDB database to use
+with Doctrine CouchDB togehter with the HTTP Client.
+
+.. code-block:: php
+
+    <?php
+    $config->setHttpClient( $client, $databaseName );
+    $config->getDatabase();
 
 Proxy Directory (***REQUIRED***)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
