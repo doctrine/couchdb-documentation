@@ -49,7 +49,7 @@ you work with a Author object in PHP.
 
 In CouchDB two documents with this relationship will look like:
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "_id": "1234",
@@ -98,7 +98,7 @@ in PHP.
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "_id": "1234",
@@ -154,7 +154,7 @@ This specifies which association on the target document contains the id referenc
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "_id": "54321",
@@ -193,7 +193,7 @@ it can detect and save this automatically.
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "_id": "1234",
@@ -228,7 +228,7 @@ You can embed an array of classes into a document.
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "_id": "1234",
