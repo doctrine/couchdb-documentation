@@ -71,17 +71,17 @@ See this example:
     <?php
     $databaseName = "project_database_name";
     $documentPaths = array("MyProject\Documents");
-    $client = new \Doctrine\CouchDB\HTTP\SocketClient();
+    $httpClient = new \Doctrine\CouchDB\HTTP\SocketClient();
+    $dbClient = new Doctrine\CouchDB\CouchDBClient($httpClient, $databaseName);
 
     $config = new \Doctrine\ODM\CouchDB\Configuration();
     $metadataDriver = $config->newDefaultAnnotationDriver($documentPaths);
 
-    $config->setHttpClient( $client, $databaseName );
     $config->setProxyDir(__DIR__ . "/proxies");
     $config->setMetadataDriverImpl($metadataDriver);
     $config->setLuceneHandlerName('_fti');
 
-    $dm = new \Doctrine\ODM\CouchDB\DocumentManager($config);
+    $dm = new \Doctrine\ODM\CouchDB\DocumentManager($dbClient, $config);
 
 CouchDBClient
 -------------
@@ -124,17 +124,6 @@ Configuration Options
 The following sections describe all the configuration options
 available on a ``Doctrine\ODM\CouchDB\Configuration`` instance.
 
-Database Name (***REQUIRED***)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You have to specify the name of the CouchDB database to use
-with Doctrine CouchDB togehter with the HTTP Client.
-
-.. code-block:: php
-
-    <?php
-    $config->setHttpClient( $client, $databaseName );
-    $config->getDatabase();
 
 Proxy Directory (***REQUIRED***)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
