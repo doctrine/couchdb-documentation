@@ -27,7 +27,7 @@ ReferenceOne
 
 You can have a reference between two documents by a reference one relationship in the following way:
 
-.. code-block: php
+.. code-block:: php
 
     <?php
     /**
@@ -49,7 +49,7 @@ you work with a Author object in PHP.
 
 In CouchDB two documents with this relationship will look like:
 
-.. code-block: json
+.. code-block:: json
 
     {
         "_id": "1234",
@@ -75,7 +75,7 @@ ReferenceMany
 
 You can have a reference between a document and a set of related documents in the following way
 
-.. code-block: php
+.. code-block:: php
 
     <?php
     /**
@@ -98,7 +98,7 @@ in PHP.
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block: json
+.. code-block:: json
 
     {
         "_id": "1234",
@@ -132,7 +132,7 @@ You can define the inverse side of a reference one or reference many association
 use a view to access which owning side documents point to the current document by holding
 a reference to their id:
 
-.. code-block: php
+.. code-block:: php
 
     <?php
     /**
@@ -154,7 +154,7 @@ This specifies which association on the target document contains the id referenc
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block: json
+.. code-block:: json
 
     {
         "_id": "54321",
@@ -171,7 +171,7 @@ EmbedOne
 
 You can embed a class into a document. Both will be saved in the same CouchDB document:
 
-.. code-block: php
+.. code-block:: php
 
     <?php
     /**
@@ -193,7 +193,7 @@ it can detect and save this automatically.
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block: json
+.. code-block:: json
 
     {
         "_id": "1234",
@@ -209,7 +209,7 @@ EmbedMany
 
 You can embed an array of classes into a document.
 
-.. code-block: php
+.. code-block:: php
 
     <?php
     /**
@@ -228,7 +228,7 @@ You can embed an array of classes into a document.
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block: json
+.. code-block:: json
 
     {
         "_id": "1234",
