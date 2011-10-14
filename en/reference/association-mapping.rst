@@ -193,7 +193,7 @@ it can detect and save this automatically.
 
 In CouchDB documents with this relationship will look like:
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "_id": "1234",
