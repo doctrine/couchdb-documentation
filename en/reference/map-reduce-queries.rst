@@ -249,8 +249,8 @@ An example execution of the username view given above looks like:
     $query = $dm->createQuery("myapp", "username");
     $result = $query->setStartKey("b")
           ->setEndKey("c")
-          ->limit(100)
-          ->skip(20)
+          ->setLimit(100)
+          ->setSkip(20)
           ->onlyDocs(true)
           ->execute();
 
@@ -275,8 +275,8 @@ The following snippet shows the difference:
     $query = $dm->createQuery("myapp", "username");
     $result = $query->setStartKey("b")
           ->setEndKey("c")
-          ->limit(100)
-          ->skip(20)
+          ->setLimit(100)
+          ->setSkip(20)
           ->onlyDocs(true)
           ->execute();
 
