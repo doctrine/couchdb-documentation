@@ -9,7 +9,7 @@ traversable through lazy loading. You essentially need to query only one documen
 then access all the others that are related by traversing the references in the objects.
 
 A document manager contains an identity map, it will never return you different instances of PHP objects
-for the document with he same ID.
+for the document with the same ID.
 
 Different Association Mappings
 ------------------------------
