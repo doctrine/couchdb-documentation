@@ -75,7 +75,7 @@ An example of a migration is the Alpha1 to Alpha2 Migration class:
             if (isset($docData['doctrine_metadata']['associations'])) {
                 $associations = array();
                 foreach ($docData['doctrine_metadata']['associations'] AS $name => $values) {
-                    $docData[$name] = $value;
+                    $docData[$name] = $values;
                     $associations[] = $name;
                 }
                 $docData['doctrine_metadata'] = $associations;
