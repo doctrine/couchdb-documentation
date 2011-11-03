@@ -168,7 +168,7 @@ Gets or sets the metadata driver implementation that is used by
 Doctrine to acquire the object-relational metadata for your
 classes.
 
-There are currently one working available implementation:
+There is currently one working available implementation:
 
 
 -  ``Doctrine\ODM\CouchDB\Mapping\Driver\AnnotationDriver``
