@@ -152,9 +152,8 @@ In CouchDB documents with this relationship will look like:
         "type": "User"
     }
 
-See how no "associations" key is present in the "doctrine_metadata" key. A view
-is used to lookup the related articles. The view emits doctrine_metadata.type, all associations
-and their ids.
+A view is used to lookup the related articles. The view emits type, all
+associations and their ids.
 
 EmbedOne
 ~~~~~~~~
