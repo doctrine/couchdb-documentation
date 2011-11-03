@@ -96,12 +96,10 @@ In CouchDB documents with this relationship will look like:
 
     {
         "_id": "1234",
+        "comments": ["55555", "44444"],
         "doctrine_metadata":
         {
-            "associations":
-            {
-                "comments": ["55555", "44444"],
-            }
+            "associations": ["comments"]
         },
         "title": "An article",
         "type": "Article"
