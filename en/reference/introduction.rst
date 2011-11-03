@@ -176,7 +176,7 @@ It would make sense to map this document to a PHP object called "Person" and Doc
 .. code-block:: php
 
     <?php
-    namespace MyProject\Document;
+    namespace MyApp\Document;
 
     /** @Document */
     class Person
@@ -189,7 +189,7 @@ It would make sense to map this document to a PHP object called "Person" and Doc
         public $country;
     }
 
-    $person = new \MyProject\Document\Person();
+    $person = new \MyApp\Document\Person();
     $person->id = "2a9d3e2af0797fad094dded89a61c18b";
     $person->name = "John Doe";
     $person->country = "New Zealand";
@@ -219,7 +219,7 @@ To make this assertion work Doctrine CouchDB has to save the type of the documen
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
-        "type": "MyProject.Document.Person",
+        "type": "MyApp.Document.Person",
         "name": "John Doe",
         "country": "New Zealand"
     }
@@ -238,7 +238,7 @@ On top of saving the association reference id into a matching json document key,
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
-        "type": "MyProject.Document.Person",
+        "type": "MyApp.Document.Person",
         "doctrine_metadata":
         {
             "associations": ["father", "mother", "addresses"]
@@ -302,7 +302,7 @@ This will lead to a JSON document structure that looks like:
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
-        "type": "MyProject.Document.Person",
+        "type": "MyApp.Document.Person",
         "doctrine_metadata":
         {
             "indexed": true,
@@ -318,8 +318,8 @@ You can now query the repository for person objects:
 
     <?php
     // enabled with @Document(indexed=true)
-    $persons = $dm->getRepository('MyProject\Document\Person')->findAll();
+    $persons = $dm->getRepository('MyApp\Document\Person')->findAll();
     // enabled with @Field(indexed=true)
-    $persons = $dm->getRepository('MyProject\Document\Person')->findBy(array("name" => "Benjamin"));
+    $persons = $dm->getRepository('MyApp\Document\Person')->findBy(array("name" => "Benjamin"));
 
 All this functionality is described in detail in later chapters, this chapter served as introduction how Doctrine saves its data into CouchDB documents.

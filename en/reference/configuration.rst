@@ -70,7 +70,7 @@ See this example:
 
     <?php
     $databaseName = "project_database_name";
-    $documentPaths = array("MyProject\Documents");
+    $documentPaths = array("MyApp\Documents");
     $httpClient = new \Doctrine\CouchDB\HTTP\SocketClient();
     $dbClient = new Doctrine\CouchDB\CouchDBClient($httpClient, $databaseName);
 
@@ -180,7 +180,7 @@ the ``Doctrine\ODM\CouchDB\Configuration``:
 .. code-block:: php
 
     <?php
-    $driverImpl = $config->newDefaultAnnotationDriver(array('/path/to/lib/MyProject/Documents'));
+    $driverImpl = $config->newDefaultAnnotationDriver(array('/path/to/lib/MyApp/Documents'));
     $config->setMetadataDriverImpl($driverImpl);
 
 The path information to the documents is required for the annotation
@@ -266,9 +266,9 @@ identifier. You could simply do this:
 .. code-block:: php
 
     <?php
-    // $dm instanceof DocumentManager, $cart instanceof MyProject\Model\Cart
+    // $dm instanceof DocumentManager, $cart instanceof MyApp\Model\Cart
     // $itemId comes from somewhere, probably a request parameter
-    $item = $dm->getReference('MyProject\Model\Item', $itemId);
+    $item = $dm->getReference('MyApp\Model\Item', $itemId);
     $cart->addItem($item);
 
 Here, we added an Item to a Cart without loading the Item from the

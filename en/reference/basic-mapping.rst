@@ -117,7 +117,7 @@ All indexed fields can be queried in ``DocumentRepository::findBy()`` and ``Docu
 .. code-block:: php
 
     <?php
-    $repository = $documentManager->getRepository("MyProject\Document\MyPersistentClass");
+    $repository = $documentManager->getRepository("MyApp\Document\MyPersistentClass");
     $john = $repository->findOneBy(array("name" => "John Galt"));
 
 Json Names
@@ -190,7 +190,7 @@ Example:
 .. code-block:: php
 
     <?php
-    /** @Document(repositoryClass="MyProject\Repository\MyPersistentRepository") */
+    /** @Document(repositoryClass="MyApp\Repository\MyPersistentRepository") */
     class MyPersistentClass
     {
         /** @Attachments */
@@ -202,5 +202,5 @@ Then when calling ``DocumentManager#getRepository`` you will get an instance of 
 .. code-block:: php
 
     <?php
-    $repository = $documentManager->getRepository("MyProject\Document\MyPersistentClass");
+    $repository = $documentManager->getRepository("MyApp\Document\MyPersistentClass");
     
