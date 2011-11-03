@@ -170,7 +170,7 @@ You can map an array of all CouchDB attachments to a document to a field in your
         private $attachments;
     }
 
-The mapped field is indexed by filename and contains instances of ``Doctrine\ODM\CouchDB\Attachment``.
+The mapped field is indexed by filename and contains instances of ``Doctrine\CouchDB\Attachment``.
 Contents of the attachments are loaded lazily by using the stub details inside the CouchDB document.
 
 Document Repositories
