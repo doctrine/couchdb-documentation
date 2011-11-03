@@ -78,7 +78,7 @@ To mark a property for relational persistence the ``@Field``
 docblock annotation is used. This annotation usually requires at
 least one attribute to be set, the ``type``. The ``type`` attribute
 specifies the Doctrine Mapping Type to use for the field. If the
-type is not specified, 'string' is used as the default mapping type
+type is not specified, 'mixed' is used as the default mapping type
 since it is the most flexible.
 
 Example:
