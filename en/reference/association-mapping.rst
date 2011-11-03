@@ -51,19 +51,19 @@ In CouchDB two documents with this relationship will look like:
         "_id": "1234",
         "doctrine_metadata":
         {
-            "type": "Article",
             "assocations":
             {
                 "author": "54321"
             }
         },
-        "title": "An article"
+        "title": "An article",
+        "type": "Article"
     }
 
     {
         "_id": "54321",
-        "doctrine_metadata": {"type": "User" },
-        "name": "Benjamin"
+        "name": "Benjamin",
+        "type": "User"
     }
 
 ReferenceMany
@@ -98,25 +98,25 @@ In CouchDB documents with this relationship will look like:
         "_id": "1234",
         "doctrine_metadata":
         {
-            "type": "Article",
             "associations":
             {
                 "comments": ["55555", "44444"],
             }
         },
         "title": "An article",
+        "type": "Article"
     }
 
     {
         "_id": "55555",
-        "doctrine_metadata": {"type": "Comment" },
-        "text": "Thank you!"
+        "text": "Thank you!",
+        "type": "Comment"
     }
 
     {
         "_id": "44444",
-        "doctrine_metadata": {"type": "Comment" },
-        "text": "Very informative!"
+        "text": "Very informative!",
+        "type": "Comment"
     }
 
 Inverse ReferenceMany
@@ -150,8 +150,8 @@ In CouchDB documents with this relationship will look like:
 
     {
         "_id": "54321",
-        "doctrine_metadata": {"type": "User" },
-        "name": "Benjamin"
+        "name": "Benjamin",
+        "type": "User"
     }
 
 See how no "associations" key is present in the "doctrine_metadata" key. A view
