@@ -93,7 +93,7 @@ Both queries have a common base class with a simple API:
         /**
          * Query the view with the current params.
          *
-         * @return Doctrine\ODM\CouchDB\View\Result
+         * @return Doctrine\CouchDB\View\Result
          */
         public function execute();
 
@@ -260,7 +260,7 @@ skipping the first 20 results and limiting the result to 100 documents.
 View Results
 ------------
 
-The result of a view is an instance of ``Doctrine\ODM\CouchDB\View\Result``.
+The result of a view is an instance of ``Doctrine\CouchDB\View\Result``.
 It implements ``Countable``, ``IteratorAggregate`` and ``ArrayAccess``.
 If you specify ``onlyDocs(true)`` each result-row will contain only
 the associated document, otherwise the document is on the row index "doc"
