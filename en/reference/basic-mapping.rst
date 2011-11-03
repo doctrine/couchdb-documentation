@@ -81,8 +81,6 @@ specifies the Doctrine Mapping Type to use for the field. If the
 type is not specified, 'mixed' is used as the default mapping type
 since it is the most flexible.
 
-Example:
-
 .. code-block:: php
 
     <?php
@@ -99,8 +97,6 @@ Indexing Fields
 CouchDB uses map-reduce to query documents. Except querying for the ID of a document
 there is no additional query capability available for fields. Doctrine CouchDB ODM
 allows you to use a predefined view that allows equality comparisons on fields:
-
-Example:
 
 .. code-block:: php
 
@@ -136,8 +132,6 @@ CouchDB documents have a special field "_id" that contains the globally
 unique identifier of a document in the database. This is always a string,
 so it suffices to specify only the @Id annotation on the property:
 
-Example:
-
 .. code-block:: php
 
     <?php
@@ -166,8 +160,6 @@ Attachments
 
 You can map an array of all CouchDB attachments to a document to a field in your PHP class:
 
-Example:
-
 .. code-block:: php
 
     <?php
@@ -187,8 +179,6 @@ Document Repositories
 A repository is a finder class for your documents. Every document automatically has a repository
 of the type ``Doctrine\ODM\CouchDB\DocumentRepository``. You can specify your own repository classes
 that extend the base repository and provide additional finder methods:
-
-Example:
 
 .. code-block:: php
 
