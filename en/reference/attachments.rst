@@ -118,7 +118,9 @@ You have to use one of the two methods ``Attachment::createFromBinaryData()`` an
 ``Attachment::createFromBase64Data()`` to create new attachments. The key of the attachments
 array will become the filename of this attachment.
 
-Sample usage:
+.. code-block:: php
+
+        <?php
 
         $fh = fopen(__DIR__ . '/_files/logo.jpg', 'r');
 
