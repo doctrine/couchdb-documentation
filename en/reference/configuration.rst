@@ -16,8 +16,8 @@ Class Loading
 
 Doctrine CouchDB has dependencies on two other libraries:
 
--  Doctrine\Common
--  Symfony\Component\Console
+-  Doctrine\\Common
+-  Symfony\\Component\\Console
 
 You have to make sure that both dependencies are installed and autoloadable.
 
