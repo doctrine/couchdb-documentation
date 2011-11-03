@@ -64,8 +64,8 @@ in the CouchDB ODM Configuration:
     );
 
 You can then create either a native or a odm-query by calling
-either ``DocumentManager#createNativeQuery($designDoc, $viewName)`` or
-``DocumentManager#createQuery($designDoc, $viewName)``.
+either ``DocumentManager#createNativeQuery($designDocName, $viewName)`` or
+``DocumentManager#createQuery($designDocName, $viewName)``.
 
 The difference between both queries is their result and some parameters. The ODM query will
 return instances of php objects that map to the CouchDB documents and
