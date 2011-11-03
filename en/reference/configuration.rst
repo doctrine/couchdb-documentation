@@ -102,9 +102,9 @@ HTTP Client (***REQUIRED***)
 
 There are two different HTTP Clients shipped with Doctrine CouchDB:
 
--   ``Doctrine\ODM\CouchDB\HTTP\SocketClient`` The default client uses fsocketopen and
+-   ``Doctrine\CouchDB\HTTP\SocketClient`` The default client uses fsockopen and
     has very good performance using keep alive connections.
--   ``Doctrine\ODM\CouchDB\HTTP\StreamClient`` Uses fopen and is therefore simpler than the SocketClient,
+-   ``Doctrine\CouchDB\HTTP\StreamClient`` Uses fopen and is therefore simpler than the SocketClient,
     however cannot use keep alive. In some PHP setups the SocketClient doesn't work and the StreamClient
     is a fallback for these situations.
 
