@@ -291,7 +291,10 @@ Instead you have to explicitly set classes and fields as "indexed", which will t
     /** @Document(indexed=true) */
     class Person
     {
-        /** @Field(type="string", indexed=true) */
+        /**
+         * @Index
+         * @Field(type="string")
+         */
         public $name;
     }
 
@@ -319,7 +322,7 @@ You can now query the repository for person objects:
     <?php
     // enabled with @Document(indexed=true)
     $persons = $dm->getRepository('MyApp\Document\Person')->findAll();
-    // enabled with @Field(indexed=true)
+    // enabled with @Index on $name property
     $persons = $dm->getRepository('MyApp\Document\Person')->findBy(array("name" => "Benjamin"));
 
 All this functionality is described in detail in later chapters, this chapter served as introduction how Doctrine saves its data into CouchDB documents.

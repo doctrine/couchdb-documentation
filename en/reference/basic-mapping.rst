@@ -108,7 +108,10 @@ Example:
     /** @Document */
     class MyPersistentClass
     {
-        /** @Field(type="string", indexed=true) */
+        /**
+         * @Index
+         * @Field(type="string")
+         */
         private $name;
     }
 
