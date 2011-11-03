@@ -269,7 +269,8 @@ identifier. You could simply do this:
 .. code-block:: php
 
     <?php
-    // $dm instanceof DocumentManager, $cart instanceof MyApp\Model\Cart
+    // $dm is an instance of DocumentManager
+    // $cart is an instance of MyApp\Model\Cart
     // $itemId comes from somewhere, probably a request parameter
     $item = $dm->getReference('MyApp\Model\Item', $itemId);
     $cart->addItem($item);

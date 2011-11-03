@@ -91,7 +91,7 @@ This simple definitions describe to Doctrine CouchDB ODM what parts of your obje
 .. code-block:: php
 
     <?php
-    // $dm is an instanceof Doctrine\ODM\CouchDB\DocumentManager
+    // $dm is an instance of Doctrine\ODM\CouchDB\DocumentManager
 
     use MyApp\Document\BlogPost;
 
@@ -124,7 +124,7 @@ Coming back to our blog post example, in any next request you can grab the BlogP
 .. code-block:: php
 
     <?php
-    // $dm is an instanceof Doctrine\ODM\CouchDB\DocumentManager
+    // $dm is an instance of Doctrine\ODM\CouchDB\DocumentManager
     $blogPost = $dm->find("MyApp\Document\BlogPost", $theUUID);
 
 Here the variable ``$blogPost`` will be of the type ``MyApp\Document\BlogPost`` with no magic whatsoever being attached to that object. There will be some magic required later on described in the Object-Graph Traversal section, but its the most unspectacular magic we could come up with.
