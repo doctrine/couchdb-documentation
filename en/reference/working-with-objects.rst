@@ -400,9 +400,7 @@ in the $addresses collection.
     class User 
     {
         //...
-        /**
-         * @ReferenceMany(targetDocument="Address", cascade={"persist", "remove"})
-         */
+        /** @ReferenceMany(targetDocument="Address", cascade={"persist", "remove"}) */
         private $addresses;
         //...
     }
@@ -521,9 +519,7 @@ in a central location.
 
     use Doctrine\ODM\CouchDB\DocumentRepository;
     
-    /**
-     * @Document(repositoryClass="UserRepository")
-     */
+    /** @Document(repositoryClass="UserRepository") */
     class User
     {
     

@@ -30,17 +30,13 @@ You can have a reference between two documents by a reference one relationship i
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class Article
     {
         /** @Id */
         private $id;
 
-        /**
-         * @ReferenceOne(targetDocument="User")
-         */
+        /** @ReferenceOne(targetDocument="User") */
         private $author;
     }
 
@@ -86,9 +82,7 @@ You can have a reference between a document and a set of related documents in th
         /** @Id */
         private $id;
 
-        /**
-         * @ReferenceMany(targetDocument="Comment")
-         */
+        /** @ReferenceMany(targetDocument="Comment") */
         private $comments;
     }
 
@@ -135,9 +129,7 @@ a reference to their id:
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class User
     {
         /** @Id */
@@ -174,17 +166,13 @@ You can embed a class into a document. Both will be saved in the same CouchDB do
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class User
     {
         /** @Id */
         private $id;
 
-        /**
-         * @EmbedOne
-         */
+        /** @EmbedOne */
         private $address;
     }
 
@@ -212,17 +200,13 @@ You can embed an array of classes into a document.
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class User
     {
         /** @Id */
         private $id;
 
-        /**
-         * @EmbedMany
-         */
+        /** @EmbedMany */
         private $phonenumbers;
     }
 
