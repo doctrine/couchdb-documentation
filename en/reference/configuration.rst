@@ -29,15 +29,15 @@ Doctrine classes.
 
     <?php
     $couchPath = "path/lib";
-    require_once $couchPath . "vendor/doctrine-common/lib/Doctrine/Common/ClassLoader.php";
+    require_once $couchPath . "/vendor/doctrine-common/lib/Doctrine/Common/ClassLoader.php";
 
-    $loader = new \Doctrine\Common\ClassLoader("Doctrine\Common", $couchPath . "vendor/doctrine-common/lib");
+    $loader = new \Doctrine\Common\ClassLoader("Doctrine\Common", $couchPath . "/vendor/doctrine-common/lib");
     $loader->register();
 
     $loader = new \Doctrine\Common\ClassLoader("Doctrine\ODM\CouchDB", $couchPath);
     $loader->register();
 
-    $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath."/vendor");
+    $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath . "/vendor");
     $loader->register();
 
 If Doctrine Common is installed via PEAR the ClassLoader can be loaded
