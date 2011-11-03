@@ -37,6 +37,9 @@ Doctrine classes.
     $loader = new \Doctrine\Common\ClassLoader("Doctrine\ODM\CouchDB", $couchPath);
     $loader->register();
 
+    $loader = new \Doctrine\Common\ClassLoader("Doctrine\CouchDB", $couchPath);
+    $loader->register();
+
     $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath . "/vendor");
     $loader->register();
 
