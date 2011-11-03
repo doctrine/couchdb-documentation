@@ -110,16 +110,16 @@ There are two different HTTP Clients shipped with Doctrine CouchDB:
 
 You can pass the following arguments to configure the HTTP Client:
 
--   host (default localhost)
--   port (default 5984)
--   username (default null)
--   password (default null)
--   ip (default null)
+-   host (default: localhost)
+-   port (default: 5984)
+-   username (default: null)
+-   password (default: null)
+-   ip (default: null)
 
 With the setOption Method you can change the additional options:
 
--  keep-alive (default true)
--  timeout (default 0.01)
+-  keep-alive (default: true)
+-  timeout (default: 0.01)
 
 Configuration Options
 ---------------------
