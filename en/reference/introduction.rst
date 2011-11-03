@@ -93,10 +93,12 @@ This simple definitions describe to Doctrine CouchDB ODM what parts of your obje
     <?php
     // $dm is an instanceof Doctrine\ODM\CouchDB\DocumentManager
 
+    use MyApp\Document\BlogPost;
+
     $blogPost = new BlogPost();
     $blogPost->setHeadline("Hello World!");
     $blogPost->setText("This is a blog post going to be saved into CouchDB");
-    $blogPost->setPublishDate(new DateTime("now"));
+    $blogPost->setPublishDate(new \DateTime("now"));
 
     $dm->persist($blogPost);
     $dm->flush();
