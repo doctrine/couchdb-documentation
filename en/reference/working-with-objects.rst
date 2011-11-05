@@ -309,9 +309,8 @@ objects or collections of objects.
 Establishing References
 -----------------------
 
-Establishing a reference to another document is straight forward:
-
-Here is an example where we add a new comment to an article:
+Establishing a reference to another document is straight forward. Here
+is an example where we add a new comment to an article:
 
 .. code-block:: php
 
