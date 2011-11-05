@@ -187,8 +187,6 @@ document has been detached.
 Doctrine will not hold on to any references to a detached
 document.
 
-Example:
-
 .. code-block:: php
 
     <?php
@@ -240,8 +238,6 @@ DocumentManager use the ``DocumentManager#merge($document)``
 method. The state of the passed document will be merged into a
 managed copy of this document and this copy will subsequently be
 returned.
-
-Example:
 
 .. code-block:: php
 
