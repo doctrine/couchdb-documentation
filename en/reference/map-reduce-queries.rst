@@ -15,7 +15,7 @@ design document in the database:
 .. code-block:: php
 
     <?php
-    use Doctrine\ODM\CouchDB\View\FolderDesignDocument;
+    use Doctrine\CouchDB\View\FolderDesignDocument;
 
     $view = new FolderDesignDocument("path/to/app/couchdb");
     $designDocJson = $view->getData();
@@ -41,7 +41,7 @@ the username map.js might look like:
 .. code-block:: javascript
 
     function(doc) {
-        if (doc.doctrine_metadata.type == 'Doctrine.Tests.Models.CMS.CmsUser') {
+        if (doc.type == 'Doctrine.Tests.Models.CMS.CmsUser') {
             emit(doc.username, doc._id);
         }
     }
@@ -59,7 +59,7 @@ in the CouchDB ODM Configuration:
     $config = $dm->getConfiguration();
     $config->addDesignDocument(
         "myapp", 
-        "Doctrine\ODM\CouchDB\View\FolderDesignDocument",
+        "Doctrine\CouchDB\View\FolderDesignDocument",
         "path/to/app/couchdb"
     );
 
@@ -78,7 +78,7 @@ Both queries have a common base class with a simple API:
 
     <?php
 
-    namespace Doctrine\ODM\CouchDB\View;
+    namespace Doctrine\CouchDB\View;
 
     abstract class AbstractQuery
     {
@@ -114,9 +114,7 @@ The following query parameter related methods exist in both the native and odm-q
 .. code-block:: php
 
     <?php
-    namespace Doctrine\ODM\CouchDB\View;
-
-    use Doctrine\ODM\CouchDB\DocumentManager;
+    namespace Doctrine\CouchDB\View;
 
     class Query extends AbstractQuery
     {
@@ -249,8 +247,8 @@ An example execution of the username view given above looks like:
     $query = $dm->createQuery("myapp", "username");
     $result = $query->setStartKey("b")
           ->setEndKey("c")
-          ->limit(100)
-          ->skip(20)
+          ->setLimit(100)
+          ->setSkip(20)
           ->onlyDocs(true)
           ->execute();
 
@@ -275,8 +273,8 @@ The following snippet shows the difference:
     $query = $dm->createQuery("myapp", "username");
     $result = $query->setStartKey("b")
           ->setEndKey("c")
-          ->limit(100)
-          ->skip(20)
+          ->setLimit(100)
+          ->setSkip(20)
           ->onlyDocs(true)
           ->execute();
 

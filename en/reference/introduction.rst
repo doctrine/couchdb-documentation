@@ -58,7 +58,7 @@ No abstract/base-class nor interface was implemented, yet you can save an object
             private $headline;
             /** @Field(type="string") */
             private $text;
-            /** @Field(type="datetime) */
+            /** @Field(type="datetime") */
             private $publishDate;
             
             // getter/setter here
@@ -112,7 +112,7 @@ Write-Behind
 
 You may ask yourself why ``persist`` and ``flush`` are two separate functions in the previous example. Doctrine persistence semantics apply a performance optimization technique by aggregating all the required changes and synchronizing them back to the database at once. In the case of CouchDB ODM this means that all changes on objects (managed by CouchDB) in memory of the current PHP request are synchronized to CouchDB in a single POST request using the HTTP Bulk Document API. Compared to making an update request per document this leads to a considerable increase in performance.
 
-This approach has a drawback though with regards to the transactional semantics of CouchDB. By default the bulk update is forced using the allOrNothing parameter of the HTTP BUlk Document API, which means that in case of different versioning numbers it will produce document conflicts that you have to resolve later. Doctrine CouchDB ODM offers an event to resolve any document conflict and it is planned to offer automatic resolution strategies such as "First-One Wins" or "Last-One Wins". If you don't enable forcing changes to the CouchDB you can end up with inconsistent state, for example if one update of a document is accepted and another one is rejected.
+This approach has a drawback though with regards to the transactional semantics of CouchDB. By default the bulk update is forced using the allOrNothing parameter of the HTTP Bulk Document API, which means that in case of different versioning numbers it will produce document conflicts that you have to resolve later. Doctrine CouchDB ODM offers an event to resolve any document conflict and it is planned to offer automatic resolution strategies such as "First-One Wins" or "Last-One Wins". If you don't enable forcing changes to the CouchDB you can end up with inconsistent state, for example if one update of a document is accepted and another one is rejected.
 
 We haven't actually figured out the best way of handling "object transactions" ourselfes, but are experimenting with it to find the best possible solution before releasing a stable Doctrine CouchDB version. Feedback in this area is highly appreciated.
 
