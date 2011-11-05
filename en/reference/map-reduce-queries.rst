@@ -41,7 +41,7 @@ the username map.js might look like:
 .. code-block:: javascript
 
     function(doc) {
-        if (doc.doctrine_metadata.type == 'Doctrine.Tests.Models.CMS.CmsUser') {
+        if (doc.type == 'Doctrine.Tests.Models.CMS.CmsUser') {
             emit(doc.username, doc._id);
         }
     }
