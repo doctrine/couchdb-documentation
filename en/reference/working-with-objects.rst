@@ -470,7 +470,7 @@ methods on a repository as follows:
     // A single user by its nickname
     $user = $dm->getRepository('User')->findOneBy(array('nickname' => 'romanb'));
 
-.. notice::
+.. note::
 
     Querying by simple conditions only works for documents with indexed fields.
 
@@ -545,3 +545,5 @@ You can access your repository now by calling:
     <?php
 
     $admins = $dm->getRepository('User')->getAllAdminUsers();
+
+
