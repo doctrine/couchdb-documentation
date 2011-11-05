@@ -394,10 +394,8 @@ in the $addresses collection.
 
     class User 
     {
-        //...
         /** @ReferenceMany(targetDocument="Address", cascade={"persist", "remove"}) */
         private $addresses;
-        //...
     }
 
 Even though automatic cascading is convenient it should be used
