@@ -15,7 +15,7 @@ design document in the database:
 .. code-block:: php
 
     <?php
-    use Doctrine\ODM\CouchDB\View\FolderDesignDocument;
+    use Doctrine\CouchDB\View\FolderDesignDocument;
 
     $view = new FolderDesignDocument("path/to/app/couchdb");
     $designDocJson = $view->getData();
@@ -59,7 +59,7 @@ in the CouchDB ODM Configuration:
     $config = $dm->getConfiguration();
     $config->addDesignDocument(
         "myapp", 
-        "Doctrine\ODM\CouchDB\View\FolderDesignDocument",
+        "Doctrine\CouchDB\View\FolderDesignDocument",
         "path/to/app/couchdb"
     );
 
