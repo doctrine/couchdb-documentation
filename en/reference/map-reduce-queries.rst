@@ -78,7 +78,7 @@ Both queries have a common base class with a simple API:
 
     <?php
 
-    namespace Doctrine\ODM\CouchDB\View;
+    namespace Doctrine\CouchDB\View;
 
     abstract class AbstractQuery
     {
@@ -114,9 +114,7 @@ The following query parameter related methods exist in both the native and odm-q
 .. code-block:: php
 
     <?php
-    namespace Doctrine\ODM\CouchDB\View;
-
-    use Doctrine\ODM\CouchDB\DocumentManager;
+    namespace Doctrine\CouchDB\View;
 
     class Query extends AbstractQuery
     {
