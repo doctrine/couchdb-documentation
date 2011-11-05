@@ -115,7 +115,7 @@ are as follows:
    If X is a new document, it becomes managed. The document X will be
    entered into the database as a result of the flush operation.
 - 
-   If X is a preexisting managed document, it is ignored by the
+   If X is a pre-existing managed document, it is ignored by the
    persist operation. However, the persist operation is cascaded to
    documents referenced by X, if the relationships from X to these
    other documents are mapped with cascade=PERSIST or cascade=ALL.
@@ -287,7 +287,7 @@ returned.
 
 The ``merge`` operation is usually not as frequently needed and
 used as ``persist`` and ``remove``. The most common scenario for
-the ``merge`` operation is to reattach documents to an
+the ``merge`` operation is to re-attach documents to an
 DocumentManager that come from some cache (and are therefore
 detached) and you want to modify and persist such a document.
 
