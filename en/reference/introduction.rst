@@ -58,7 +58,7 @@ No abstract/base-class nor interface was implemented, yet you can save an object
             private $headline;
             /** @Field(type="string") */
             private $text;
-            /** @Field(type="datetime) */
+            /** @Field(type="datetime") */
             private $publishDate;
             
             // getter/setter here
@@ -91,12 +91,14 @@ This simple definitions describe to Doctrine CouchDB ODM what parts of your obje
 .. code-block:: php
 
     <?php
-    // $dm is an instanceof Doctrine\ODM\CouchDB\DocumentManager
+    // $dm is an instance of Doctrine\ODM\CouchDB\DocumentManager
+
+    use MyApp\Document\BlogPost;
 
     $blogPost = new BlogPost();
     $blogPost->setHeadline("Hello World!");
     $blogPost->setText("This is a blog post going to be saved into CouchDB");
-    $blogPost->setPublishDate(new DateTime("now"));
+    $blogPost->setPublishDate(new \DateTime("now"));
 
     $dm->persist($blogPost);
     $dm->flush();
@@ -110,7 +112,7 @@ Write-Behind
 
 You may ask yourself why ``persist`` and ``flush`` are two separate functions in the previous example. Doctrine persistence semantics apply a performance optimization technique by aggregating all the required changes and synchronizing them back to the database at once. In the case of CouchDB ODM this means that all changes on objects (managed by CouchDB) in memory of the current PHP request are synchronized to CouchDB in a single POST request using the HTTP Bulk Document API. Compared to making an update request per document this leads to a considerable increase in performance.
 
-This approach has a drawback though with regards to the transactional semantics of CouchDB. By default the bulk update is forced using the allOrNothing parameter of the HTTP BUlk Document API, which means that in case of different versioning numbers it will produce document conflicts that you have to resolve later. Doctrine CouchDB ODM offers an event to resolve any document conflict and it is planned to offer automatic resolution strategies such as "First-One Wins" or "Last-One Wins". If you don't enable forcing changes to the CouchDB you can end up with inconsistent state, for example if one update of a document is accepted and another one is rejected.
+This approach has a drawback though with regards to the transactional semantics of CouchDB. By default the bulk update is forced using the allOrNothing parameter of the HTTP Bulk Document API, which means that in case of different versioning numbers it will produce document conflicts that you have to resolve later. Doctrine CouchDB ODM offers an event to resolve any document conflict and it is planned to offer automatic resolution strategies such as "First-One Wins" or "Last-One Wins". If you don't enable forcing changes to the CouchDB you can end up with inconsistent state, for example if one update of a document is accepted and another one is rejected.
 
 We haven't actually figured out the best way of handling "object transactions" ourselfes, but are experimenting with it to find the best possible solution before releasing a stable Doctrine CouchDB version. Feedback in this area is highly appreciated.
 
@@ -122,7 +124,7 @@ Coming back to our blog post example, in any next request you can grab the BlogP
 .. code-block:: php
 
     <?php
-    // $dm is an instanceof Doctrine\ODM\CouchDB\DocumentManager
+    // $dm is an instance of Doctrine\ODM\CouchDB\DocumentManager
     $blogPost = $dm->find("MyApp\Document\BlogPost", $theUUID);
 
 Here the variable ``$blogPost`` will be of the type ``MyApp\Document\BlogPost`` with no magic whatsoever being attached to that object. There will be some magic required later on described in the Object-Graph Traversal section, but its the most unspectacular magic we could come up with.
@@ -174,7 +176,7 @@ It would make sense to map this document to a PHP object called "Person" and Doc
 .. code-block:: php
 
     <?php
-    namespace MyProject\Document;
+    namespace MyApp\Document;
 
     /** @Document */
     class Person
@@ -187,7 +189,7 @@ It would make sense to map this document to a PHP object called "Person" and Doc
         public $country;
     }
 
-    $person = new \MyProject\Document\Person();
+    $person = new \MyApp\Document\Person();
     $person->id = "2a9d3e2af0797fad094dded89a61c18b";
     $person->name = "John Doe";
     $person->country = "New Zealand";
@@ -217,7 +219,7 @@ To make this assertion work Doctrine CouchDB has to save the type of the documen
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
-        "type": "MyProject.Document.Person",
+        "type": "MyApp.Document.Person",
         "name": "John Doe",
         "country": "New Zealand"
     }
@@ -236,7 +238,7 @@ On top of saving the association reference id into a matching json document key,
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
-        "type": "MyProject.Document.Person",
+        "type": "MyApp.Document.Person",
         "doctrine_metadata":
         {
             "associations": ["father", "mother", "addresses"]
@@ -289,7 +291,10 @@ Instead you have to explicitly set classes and fields as "indexed", which will t
     /** @Document(indexed=true) */
     class Person
     {
-        /** @Field(type="string", indexed=true) */
+        /**
+         * @Index
+         * @Field(type="string")
+         */
         public $name;
     }
 
@@ -300,7 +305,7 @@ This will lead to a JSON document structure that looks like:
     {
         "_id": "2a9d3e2af0797fad094dded89a61c18b",
         "_rev": "1-e76c463b527734b80f9ba55965fdffdf",
-        "type": "MyProject.Document.Person",
+        "type": "MyApp.Document.Person",
         "doctrine_metadata":
         {
             "indexed": true,
@@ -316,8 +321,8 @@ You can now query the repository for person objects:
 
     <?php
     // enabled with @Document(indexed=true)
-    $persons = $dm->getRepository('MyProject\Document\Person')->findAll();
-    // enabled with @Field(indexed=true)
-    $persons = $dm->getRepository('MyProject\Document\Person')->findBy(array("name" => "Benjamin"));
+    $persons = $dm->getRepository('MyApp\Document\Person')->findAll();
+    // enabled with @Index on $name property
+    $persons = $dm->getRepository('MyApp\Document\Person')->findBy(array("name" => "Benjamin"));
 
 All this functionality is described in detail in later chapters, this chapter served as introduction how Doctrine saves its data into CouchDB documents.

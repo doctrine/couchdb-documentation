@@ -17,14 +17,14 @@ of a document of this type:
         private $attachments;
     }
 
-The attachments field is an array of ``Doctrine\ODM\CouchDB\Attachment`` instances.
+The attachments field is an array of ``Doctrine\CouchDB\Attachment`` instances.
 Keys of the attachments array are the filenames of the attachments.
 
-The API of the ``Doctrine\ODM\CouchDB\Attachment`` looks as follows:
+The API of the ``Doctrine\CouchDB\Attachment`` looks as follows:
 
 .. code-block:: php
 
-    namespace Doctrine\ODM\CouchDB;
+    namespace Doctrine\CouchDB;
 
     class Attachment
     {
@@ -118,12 +118,14 @@ You have to use one of the two methods ``Attachment::createFromBinaryData()`` an
 ``Attachment::createFromBase64Data()`` to create new attachments. The key of the attachments
 array will become the filename of this attachment.
 
-Sample usage:
+.. code-block:: php
+
+        <?php
 
         $fh = fopen(__DIR__ . '/_files/logo.jpg', 'r');
 
         $user = $dm->find('Doctrine\Tests\Models\CMS\CmsUser', 'user_with_attachment');
-        $user->attachments['logo.jpg'] = \Doctrine\ODM\CouchDB\Attachment::createFromBinaryData($fh, 'image/jpeg');
+        $user->attachments['logo.jpg'] = \Doctrine\CouchDB\Attachment::createFromBinaryData($fh, 'image/jpeg');
 
         $dm->flush();
 

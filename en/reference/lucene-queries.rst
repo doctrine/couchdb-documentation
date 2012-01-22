@@ -24,7 +24,7 @@ You can use the design-doc API of Doctrine, for example:
                         "index" => "function(doc) {
                             var ret = new Document();
                             ret.add(doc.name);
-                            ret.add(doc.doctrine_metadata.type, {field: \"type\"});
+                            ret.add(doc.type, {field: \"type\"});
                             return ret;
                         }"
                     )
@@ -36,14 +36,14 @@ You can use the design-doc API of Doctrine, for example:
 You can use the CouchDB Client to create the design document for this lucene view.
 
 When you have created a CouchDB Lucene view you can query it with Doctrine using
-the ``DocumentManager#createLuceneQuery`` method. A lucene query instance extends
-``AbstractQuery`` like the Doctrine CouchDB Map-Reduce queries.
+the ``DocumentManager#createLuceneQuery($designDocName, $viewName)`` method. A lucene
+query instance extends ``AbstractQuery`` like the Doctrine CouchDB Map-Reduce queries.
 
 An example showing all the functionalities of a lucene query looks like:
 
 .. code-block:: php
 
-    $query = $dm->createLuceneQuery("designName", "viewName");
+    $query = $dm->createLuceneQuery("designDocName", "viewName");
     $result = $query->setQuery("+bar -foo")
           ->setSkip(20)
           ->setLimit(100)

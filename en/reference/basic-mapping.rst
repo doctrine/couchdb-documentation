@@ -76,12 +76,10 @@ other objects are covered in the chapter "Association Mapping".
 
 To mark a property for relational persistence the ``@Field``
 docblock annotation is used. This annotation usually requires at
-least 1 attribute to be set, the ``type``. The ``type`` attribute
+least one attribute to be set, the ``type``. The ``type`` attribute
 specifies the Doctrine Mapping Type to use for the field. If the
-type is not specified, 'string' is used as the default mapping type
+type is not specified, 'mixed' is used as the default mapping type
 since it is the most flexible.
-
-Example:
 
 .. code-block:: php
 
@@ -100,15 +98,16 @@ CouchDB uses map-reduce to query documents. Except querying for the ID of a docu
 there is no additional query capability available for fields. Doctrine CouchDB ODM
 allows you to use a predefined view that allows equality comparisons on fields:
 
-Example:
-
 .. code-block:: php
 
     <?php
     /** @Document */
     class MyPersistentClass
     {
-        /** @Field(type="string", indexed=true) */
+        /**
+         * @Index
+         * @Field(type="string")
+         */
         private $name;
     }
 
@@ -117,7 +116,7 @@ All indexed fields can be queried in ``DocumentRepository::findBy()`` and ``Docu
 .. code-block:: php
 
     <?php
-    $repository = $documentManager->getRepository("MyProject\Document\MyPersistentClass");
+    $repository = $documentManager->getRepository("MyApp\Document\MyPersistentClass");
     $john = $repository->findOneBy(array("name" => "John Galt"));
 
 Json Names
@@ -132,8 +131,6 @@ Id Mapping
 CouchDB documents have a special field "_id" that contains the globally
 unique identifier of a document in the database. This is always a string,
 so it suffices to specify only the @Id annotation on the property:
-
-Example:
 
 .. code-block:: php
 
@@ -163,8 +160,6 @@ Attachments
 
 You can map an array of all CouchDB attachments to a document to a field in your PHP class:
 
-Example:
-
 .. code-block:: php
 
     <?php
@@ -175,7 +170,7 @@ Example:
         private $attachments;
     }
 
-The mapped field is indexed by filename and contains instances of ``Doctrine\ODM\CouchDB\Attachment``.
+The mapped field is indexed by filename and contains instances of ``Doctrine\CouchDB\Attachment``.
 Contents of the attachments are loaded lazily by using the stub details inside the CouchDB document.
 
 Document Repositories
@@ -185,12 +180,10 @@ A repository is a finder class for your documents. Every document automatically 
 of the type ``Doctrine\ODM\CouchDB\DocumentRepository``. You can specify your own repository classes
 that extend the base repository and provide additional finder methods:
 
-Example:
-
 .. code-block:: php
 
     <?php
-    /** @Document(repositoryClass="MyProject\Repository\MyPersistentRepository") */
+    /** @Document(repositoryClass="MyApp\Repository\MyPersistentRepository") */
     class MyPersistentClass
     {
         /** @Attachments */
@@ -202,5 +195,5 @@ Then when calling ``DocumentManager#getRepository`` you will get an instance of 
 .. code-block:: php
 
     <?php
-    $repository = $documentManager->getRepository("MyProject\Document\MyPersistentClass");
+    $repository = $documentManager->getRepository("MyApp\Document\MyPersistentClass");
     

@@ -16,8 +16,8 @@ Class Loading
 
 Doctrine CouchDB has dependencies on two other libraries:
 
--  Doctrine\Common
--  Symfony\Component\Console
+-  Doctrine\\Common
+-  Symfony\\Component\\Console
 
 You have to make sure that both dependencies are installed and autoloadable.
 
@@ -29,15 +29,18 @@ Doctrine classes.
 
     <?php
     $couchPath = "path/lib";
-    require_once $couchPath . "vendor/doctrine-common/lib/Doctrine/Common/ClassLoader.php";
+    require_once $couchPath . "/vendor/doctrine-common/lib/Doctrine/Common/ClassLoader.php";
 
-    $loader = new \Doctrine\Common\ClassLoader("Doctrine\Common", $couchPath . "vendor/doctrine-common/lib");
+    $loader = new \Doctrine\Common\ClassLoader("Doctrine\Common", $couchPath . "/vendor/doctrine-common/lib");
     $loader->register();
 
     $loader = new \Doctrine\Common\ClassLoader("Doctrine\ODM\CouchDB", $couchPath);
     $loader->register();
 
-    $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath."/vendor");
+    $loader = new \Doctrine\Common\ClassLoader("Doctrine\CouchDB", $couchPath);
+    $loader->register();
+
+    $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath . "/vendor");
     $loader->register();
 
 If Doctrine Common is installed via PEAR the ClassLoader can be loaded
@@ -70,7 +73,7 @@ See this example:
 
     <?php
     $databaseName = "project_database_name";
-    $documentPaths = array("MyProject\Documents");
+    $documentPaths = array("MyApp\Documents");
     $httpClient = new \Doctrine\CouchDB\HTTP\SocketClient();
     $dbClient = new Doctrine\CouchDB\CouchDBClient($httpClient, $databaseName);
 
@@ -99,24 +102,24 @@ HTTP Client (***REQUIRED***)
 
 There are two different HTTP Clients shipped with Doctrine CouchDB:
 
--   ``Doctrine\ODM\CouchDB\HTTP\SocketClient`` The default client uses fsocketopen and
+-   ``Doctrine\CouchDB\HTTP\SocketClient`` The default client uses fsockopen and
     has very good performance using keep alive connections.
--   ``Doctrine\ODM\CouchDB\HTTP\StreamClient`` Uses fopen and is therefore simpler than the SocketClient,
+-   ``Doctrine\CouchDB\HTTP\StreamClient`` Uses fopen and is therefore simpler than the SocketClient,
     however cannot use keep alive. In some PHP setups the SocketClient doesn't work and the StreamClient
     is a fallback for these situations.
 
 You can pass the following arguments to configure the HTTP Client:
 
--   host (default localhost)
--   port (default 5984)
--   username (default null)
--   password (default null)
--   ip (default null)
+-   host (default: localhost)
+-   port (default: 5984)
+-   username (default: null)
+-   password (default: null)
+-   ip (default: null)
 
 With the setOption Method you can change the additional options:
 
--  keep-alive (default true)
--  timeout (default 0.01)
+-  keep-alive (default: true)
+-  timeout (default: 0.01)
 
 Configuration Options
 ---------------------
@@ -165,7 +168,7 @@ Gets or sets the metadata driver implementation that is used by
 Doctrine to acquire the object-relational metadata for your
 classes.
 
-There are currently one working available implementation:
+There is currently one working available implementation:
 
 
 -  ``Doctrine\ODM\CouchDB\Mapping\Driver\AnnotationDriver``
@@ -180,7 +183,7 @@ the ``Doctrine\ODM\CouchDB\Configuration``:
 .. code-block:: php
 
     <?php
-    $driverImpl = $config->newDefaultAnnotationDriver(array('/path/to/lib/MyProject/Documents'));
+    $driverImpl = $config->newDefaultAnnotationDriver(array('/path/to/lib/MyApp/Documents'));
     $config->setMetadataDriverImpl($driverImpl);
 
 The path information to the documents is required for the annotation
@@ -266,9 +269,10 @@ identifier. You could simply do this:
 .. code-block:: php
 
     <?php
-    // $dm instanceof DocumentManager, $cart instanceof MyProject\Model\Cart
+    // $dm is an instance of DocumentManager
+    // $cart is an instance of MyApp\Model\Cart
     // $itemId comes from somewhere, probably a request parameter
-    $item = $dm->getReference('MyProject\Model\Item', $itemId);
+    $item = $dm->getReference('MyApp\Model\Item', $itemId);
     $cart->addItem($item);
 
 Here, we added an Item to a Cart without loading the Item from the

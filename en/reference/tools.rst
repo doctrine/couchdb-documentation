@@ -21,8 +21,8 @@ Now if you execute your script or the couchdb command installed with pear "doctr
 
 ::
 
-    shell> php doctrine.php 
-    Doctrine CouchDB CLI version 1.0.0alpha1
+    shell> php doctrine-couchdb.php
+    Doctrine CouchDB CLI version 1.0.0ALPHA2
 
     Usage:
       [options] command [arguments]
@@ -32,23 +32,21 @@ Now if you execute your script or the couchdb command installed with pear "doctr
       --quiet          -q Do not output any message.
       --verbose        -v Increase verbosity of messages.
       --version        -V Display this program version.
-      --ansi           -a Force ANSI output.
+      --ansi              Force ANSI output.
+      --no-ansi           Disable ANSI output.
       --no-interaction -n Do not ask any interactive question.
 
     Available commands:
-      help                Displays help for a command (?)
-      list                Lists commands
+      help                                   Displays help for a command
+      list                                   Lists commands
     couchdb
-      :migrate            Execute a migration in CouchDB.
-    couchdb:maintenance
-      :compact-database   Compact the database
-      :compact-view       Compat the given view
-      :view-cleanup       Cleanup deleted views
-    couchdb:odm
-      :update-design-doc  Update design document
-    couchdb:replication
-      :cancel             Cancel replication from a given source to target.
-      :start              Start replication from a given source to target.
+      couchdb:maintenance:compact-database   Compact the database
+      couchdb:maintenance:compact-view       Compat the given view
+      couchdb:maintenance:view-cleanup       Cleanup deleted views
+      couchdb:migrate                        Execute a migration in CouchDB.
+      couchdb:odm:update-design-doc          Update all new/modified registered design docs or a single document if a docname is provided.
+      couchdb:replication:cancel             Cancel replication from a given source to target.
+      couchdb:replication:start              Start replication from a given source to target.
 
 couchdb:migrate
 ---------------
@@ -77,7 +75,7 @@ An example of a migration is the Alpha1 to Alpha2 Migration class:
             if (isset($docData['doctrine_metadata']['associations'])) {
                 $associations = array();
                 foreach ($docData['doctrine_metadata']['associations'] AS $name => $values) {
-                    $docData[$name] = $value;
+                    $docData[$name] = $values;
                     $associations[] = $name;
                 }
                 $docData['doctrine_metadata'] = $associations;

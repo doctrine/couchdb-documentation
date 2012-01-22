@@ -9,7 +9,7 @@ traversable through lazy loading. You essentially need to query only one documen
 then access all the others that are related by traversing the references in the objects.
 
 A document manager contains an identity map, it will never return you different instances of PHP objects
-for the document with he same ID.
+for the document with the same ID.
 
 Different Association Mappings
 ------------------------------
@@ -30,17 +30,13 @@ You can have a reference between two documents by a reference one relationship i
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class Article
     {
         /** @Id */
         private $id;
 
-        /**
-         * @ReferenceOne(targetDocument="User")
-         */
+        /** @ReferenceOne(targetDocument="User") */
         private $author;
     }
 
@@ -55,19 +51,19 @@ In CouchDB two documents with this relationship will look like:
         "_id": "1234",
         "doctrine_metadata":
         {
-            "type": "Article",
             "assocations":
             {
                 "author": "54321"
             }
         },
-        "title": "An article"
+        "title": "An article",
+        "type": "Article"
     }
 
     {
         "_id": "54321",
-        "doctrine_metadata": {"type": "User" },
-        "name": "Benjamin"
+        "name": "Benjamin",
+        "type": "User"
     }
 
 ReferenceMany
@@ -86,9 +82,7 @@ You can have a reference between a document and a set of related documents in th
         /** @Id */
         private $id;
 
-        /**
-         * @ReferenceMany(targetDocument="Comment")
-         */
+        /** @ReferenceMany(targetDocument="Comment") */
         private $comments;
     }
 
@@ -102,27 +96,25 @@ In CouchDB documents with this relationship will look like:
 
     {
         "_id": "1234",
+        "comments": ["55555", "44444"],
         "doctrine_metadata":
         {
-            "type": "Article",
-            "associations":
-            {
-                "comments": ["55555", "44444"],
-            }
+            "associations": ["comments"]
         },
         "title": "An article",
+        "type": "Article"
     }
 
     {
         "_id": "55555",
-        "doctrine_metadata": {"type": "Comment" },
-        "text": "Thank you!"
+        "text": "Thank you!",
+        "type": "Comment"
     }
 
     {
         "_id": "44444",
-        "doctrine_metadata": {"type": "Comment" },
-        "text": "Very informative!"
+        "text": "Very informative!",
+        "type": "Comment"
     }
 
 Inverse ReferenceMany
@@ -135,9 +127,7 @@ a reference to their id:
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class User
     {
         /** @Id */
@@ -158,13 +148,12 @@ In CouchDB documents with this relationship will look like:
 
     {
         "_id": "54321",
-        "doctrine_metadata": {"type": "User" },
-        "name": "Benjamin"
+        "name": "Benjamin",
+        "type": "User"
     }
 
-See how no "associations" key is present in the "doctrine_metadata" key. A view
-is used to lookup the related articles. The view emits doctrine_metadata.type, all associations
-and their ids.
+A view is used to lookup the related articles. The view emits type, all
+associations and their ids.
 
 EmbedOne
 ~~~~~~~~
@@ -174,17 +163,13 @@ You can embed a class into a document. Both will be saved in the same CouchDB do
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class User
     {
         /** @Id */
         private $id;
 
-        /**
-         * @EmbedOne
-         */
+        /** @EmbedOne */
         private $address;
     }
 
@@ -212,17 +197,13 @@ You can embed an array of classes into a document.
 .. code-block:: php
 
     <?php
-    /**
-     * @Document
-     */
+    /** @Document */
     class User
     {
         /** @Id */
         private $id;
 
-        /**
-         * @EmbedMany
-         */
+        /** @EmbedMany */
         private $phonenumbers;
     }
 

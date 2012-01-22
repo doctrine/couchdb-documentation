@@ -115,7 +115,7 @@ are as follows:
    If X is a new document, it becomes managed. The document X will be
    entered into the database as a result of the flush operation.
 - 
-   If X is a preexisting managed document, it is ignored by the
+   If X is a pre-existing managed document, it is ignored by the
    persist operation. However, the persist operation is cascaded to
    documents referenced by X, if the relationships from X to these
    other documents are mapped with cascade=PERSIST or cascade=ALL.
@@ -187,8 +187,6 @@ document has been detached.
 Doctrine will not hold on to any references to a detached
 document.
 
-Example:
-
 .. code-block:: php
 
     <?php
@@ -241,8 +239,6 @@ method. The state of the passed document will be merged into a
 managed copy of this document and this copy will subsequently be
 returned.
 
-Example:
-
 .. code-block:: php
 
     <?php
@@ -291,7 +287,7 @@ Example:
 
 The ``merge`` operation is usually not as frequently needed and
 used as ``persist`` and ``remove``. The most common scenario for
-the ``merge`` operation is to reattach documents to an
+the ``merge`` operation is to re-attach documents to an
 DocumentManager that come from some cache (and are therefore
 detached) and you want to modify and persist such a document.
 
@@ -313,9 +309,8 @@ objects or collections of objects.
 Establishing References
 -----------------------
 
-Establishing a reference to another document is straight forward:
-
-Here is an example where we add a new comment to an article:
+Establishing a reference to another document is straight forward. Here
+is an example where we add a new comment to an article:
 
 .. code-block:: php
 
@@ -399,12 +394,8 @@ in the $addresses collection.
 
     class User 
     {
-        //...
-        /**
-         * @ReferenceMany(targetDocument="Address", cascade={"persist", "remove"})
-         */
+        /** @ReferenceMany(targetDocument="Address", cascade={"persist", "remove"}) */
         private $addresses;
-        //...
     }
 
 Even though automatic cascading is convenient it should be used
@@ -470,7 +461,7 @@ methods on a repository as follows:
     // A single user by its nickname
     $user = $dm->getRepository('User')->findOneBy(array('nickname' => 'romanb'));
 
-.. notice::
+.. note::
 
     Querying by simple conditions only works for documents with indexed fields.
 
@@ -521,9 +512,7 @@ in a central location.
 
     use Doctrine\ODM\CouchDB\DocumentRepository;
     
-    /**
-     * @Document(repositoryClass="UserRepository")
-     */
+    /** @Document(repositoryClass="UserRepository") */
     class User
     {
     
