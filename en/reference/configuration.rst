@@ -5,7 +5,7 @@ Bootstrapping
 -------------
 
 Bootstrapping Doctrine is a relatively simple procedure that
-roughly exists of just 2 steps:
+roughly consists of just 2 steps:
 
 
 -  Making sure Doctrine class files can be loaded on demand.
