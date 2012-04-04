@@ -20,7 +20,7 @@ design document in the database:
     $view = new FolderDesignDocument("path/to/app/couchdb");
     $designDocJson = $view->getData();
 
-    $couchClient->createDesignDoc("myapp", $view);
+    $couchClient->createDesignDocument("myapp", $view);
     
 If the directory structure now looked like the following:
 
