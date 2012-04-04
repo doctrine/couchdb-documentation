@@ -23,7 +23,8 @@ You have to make sure that both dependencies are installed and autoloadable.
 
 The Github checkout comes with a submodule of the Doctrine Common library. It contains
 the ``Doctrine\Common\ClassLoader`` which should be used for autoloading all the necessary
-Doctrine classes.
+Doctrine classes. It is also necessary to register the annotation namespace with the 
+AnnotationRegistry so the Doctrine annotation classes can be loaded on demand.
 
 .. code-block:: php
 
@@ -42,6 +43,9 @@ Doctrine classes.
 
     $loader = new \Doctrine\Common\ClassLoader("Symfony", $couchPath . "/vendor");
     $loader->register();
+
+    $annotationNs = 'Doctrine\\ODM\\CouchDB\\Mapping\\Annotations';
+    Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace($annotationNs, $couchPath);
 
 If Doctrine Common is installed via PEAR the ClassLoader can be loaded
 from the include path:
@@ -62,6 +66,9 @@ from the include path:
 
     $loader = new \Doctrine\Common\ClassLoader("Symfony");
     $loader->register();
+
+    $annotationNs = 'Doctrine\\ODM\\CouchDB\\Mapping\\Annotations';
+    Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace($annotationNs, $couchPath);
 
 Obtaining the DocumentManager
 -----------------------------
