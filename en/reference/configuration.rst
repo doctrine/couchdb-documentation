@@ -5,7 +5,7 @@ Bootstrapping
 -------------
 
 Bootstrapping Doctrine is a relatively simple procedure that
-roughly exists of just 2 steps:
+roughly consists of just 2 steps:
 
 
 -  Making sure Doctrine class files can be loaded on demand.
@@ -21,7 +21,7 @@ Doctrine CouchDB has dependencies on two other libraries:
 
 You have to make sure that both dependencies are installed and autoloadable.
 
-The Github checkout of comes with a submodule of the Doctrine Common library. It contains
+The Github checkout comes with a submodule of the Doctrine Common library. It contains
 the ``Doctrine\Common\ClassLoader`` which should be used for autoloading all the necessary
 Doctrine classes.
 

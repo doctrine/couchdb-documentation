@@ -21,7 +21,7 @@ Features
 Architecture
 ------------
 
-The Doctrine persistence semantics demand a strict separation of persistence and business logic. This means the PHP Objects that you can map to CouchDB documents do not extend any base class or implement any interface. These objects and their associations between each other don't even know that they are saved inside the CouchDB, fow all they know it could also be the ORM or MongoDB solving their persistence needs. Instead of having ``save()``, ``delete()`` and finder methods on your PHP objects Doctrine CouchDB ODM provides you with a management/query layer that translates between CouchDB documents and PHP objects.
+The Doctrine persistence semantics demand a strict separation of persistence and business logic. This means the PHP Objects that you can map to CouchDB documents do not extend any base class or implement any interface. These objects and their associations between each other don't even know that they are saved inside the CouchDB, for all they know it could also be the ORM or MongoDB solving their persistence needs. Instead of having ``save()``, ``delete()`` and finder methods on your PHP objects Doctrine CouchDB ODM provides you with a management/query layer that translates between CouchDB documents and PHP objects.
 
 For example take this BlogPost entity:
 
@@ -86,7 +86,7 @@ No abstract/base-class nor interface was implemented, yet you can save an object
                 text: { type: string }
                 publishDate: { type: datetime }
 
-This simple definitions describe to Doctrine CouchDB ODM what parts of your object should be mapped. Now your application code saving an instance of a blog post will look like the following lines:
+These simple definitions describe to Doctrine CouchDB ODM what parts of your object should be mapped. Now your application code saving an instance of a blog post will look like the following lines:
 
 .. code-block:: php
 
