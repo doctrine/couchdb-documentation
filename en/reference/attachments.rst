@@ -24,6 +24,7 @@ The API of the ``Doctrine\CouchDB\Attachment`` looks as follows:
 
 .. code-block:: php
 
+    <?php
     namespace Doctrine\CouchDB;
 
     class Attachment
