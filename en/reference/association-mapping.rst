@@ -51,7 +51,7 @@ In CouchDB two documents with this relationship will look like:
         "_id": "1234",
         "doctrine_metadata":
         {
-            "assocations":
+            "associations":
             {
                 "author": "54321"
             }
