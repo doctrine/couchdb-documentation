@@ -40,7 +40,7 @@ For example take this BlogPost entity:
         // getter/setter here
     }
 
-No abstract/base-class nor interface was implemented, yet you can save an object of ``BlogPost`` into the CouchDB. You have to provide some metadata mapping information though, which is a neccessary evil of any generic solution mapping between two different systems (CouchDB and PHP Objects). Doctrine CouchDB allows you to specifiy metadata using four different means: PHP Docblock Annotations, YAML, XML and PHP. Have a look at the following code examples:
+No abstract/base-class nor interface was implemented, yet you can save an object of ``BlogPost`` into the CouchDB. You have to provide some metadata mapping information though, which is a necessary evil of any generic solution mapping between two different systems (CouchDB and PHP Objects). Doctrine CouchDB allows you to specifiy metadata using four different means: PHP Docblock Annotations, YAML, XML and PHP. Have a look at the following code examples:
 
 .. configuration-block::
 
